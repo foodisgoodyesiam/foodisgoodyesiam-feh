@@ -105,6 +105,7 @@ struct __fehoptions {
 	char *start_list_at;
 	char *info_cmd;
 	char *index_info;
+	char *sven_log_path;
 
 	int force_aliasing;
 	int thumb_w;
@@ -254,6 +255,7 @@ OPTION_auto_reload,
 OPTION_class,
 OPTION_no_conversion_cache,
 OPTION_window_id,
+OPTION_sven_log,
 };
 
 //typedef enum __fehoption fehoption;

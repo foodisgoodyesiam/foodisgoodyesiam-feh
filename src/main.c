@@ -2,6 +2,7 @@
 
 Copyright (C) 1999-2003 Tom Gilbert.
 Copyright (C) 2010-2020 Birte Kristina Friesel.
+Copyright (C) 2024 Steven Marion. (I think? Look into this, does my name go here?)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -32,6 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "events.h"
 #include "signals.h"
 #include "wallpaper.h"
+#include "sven_stuff.h"
 #include <termios.h>
 
 #ifdef HAVE_INOTIFY
@@ -55,6 +57,8 @@ int main(int argc, char **argv)
 #endif
 
 	init_parse_options(argc, argv);
+
+	init_sven_stuff();
 
 	init_imlib_fonts();
 

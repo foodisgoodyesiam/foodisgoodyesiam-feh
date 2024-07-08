@@ -437,6 +437,7 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		{"class"         , 1, 0, OPTION_class},
 		{"no-conversion-cache", 0, 0, OPTION_no_conversion_cache},
 		{"window-id", 1, 0, OPTION_window_id},
+		{"sven-log", 1, 0, OPTION_sven_log},
 		{0, 0, 0, 0}
 	};
 	int optch = 0, cmdx = 0;
@@ -854,6 +855,13 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 				opt.zoom_rate = 1.0;
 			} else {
 				opt.zoom_rate = 1 + ((float)opt.zoom_rate / 100);
+			}
+			break;
+		case OPTION_sven_log:
+			if (opt.sven_log_path!=NULL) {
+				weprintf("you gave --sven-log twice. Ignoring additional --sven-log with argument %c", optarg);
+			} else {
+				opt.sven_log_path = optarg;
 			}
 			break;
 		default:

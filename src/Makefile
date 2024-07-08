@@ -21,6 +21,7 @@ TARGETS = \
 	slideshow.c \
 	thumbnail.c \
 	timers.c \
+	sven_stuff.c \
 	utils.c \
 	wallpaper.c \
 	winwidget.c

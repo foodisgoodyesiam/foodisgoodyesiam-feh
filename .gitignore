@@ -6,3 +6,5 @@
 /man/*.1
 *~
 core
+.vscode
+test-images
