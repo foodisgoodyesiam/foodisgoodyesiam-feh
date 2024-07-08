@@ -29,9 +29,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <Imlib2.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <malloc.h>
+#include <string.h>
 #include "feh.h"
-#include "sven_stuff.h"
 #include "options.h"
+#include "filelist.h"
+#include "menu.h"
+#include "structs.h"
+#include "winwidget.h"
+#include "sven_stuff.h"
 
 #define LIKELY(a) __builtin_expect((bool)(a), true)
 #define UNLIKELY(a) __builtin_expect((bool)(a), false)
@@ -44,24 +50,42 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     eprintf(msg ": %s", ##__VA_ARGS__, error_message); \
 }
 
+#define SVEN_MENU_OPTION_BUFFER_SIZE 40
+
+#define CB_PRINT_TO_SVEN_LOG -1
+
 static FILE* sven_log_out;
+static char sven_menu_option[SVEN_MENU_OPTION_BUFFER_SIZE];
 
 static void sven_close_log();
 
 void init_sven_stuff() {
     if (opt.sven_log_path != NULL) {
-        sven_log_out = fopen(opt.sven_log_path, "wt");
+        sven_log_out = fopen(opt.sven_log_path, "wat");
         if (UNLIKELY(sven_log_out==NULL)) {
             SVEN_FATAL_ERRNO("Could not open %s", opt.sven_log_path);
         }
+        snprintf(sven_menu_option, SVEN_MENU_OPTION_BUFFER_SIZE, "Log to %s", opt.sven_log_path);
         atexit(sven_close_log);
     }
+}
+
+void sven_add_to_main_menu(feh_menu *m) {
+    if (opt.sven_log_path != NULL) {
+        feh_menu_add_entry(m, sven_menu_option, NULL, CB_PRINT_TO_SVEN_LOG, 0, NULL);
+    }
+}
+
+void sven_handle_main_menu_action(feh_menu *m, feh_menu_item *i, int action, unsigned short data) {
+    const char* path = FEH_FILE(m->fehwin->file->data)->filename;
+    fprintf(sven_log_out, "%s\n", path);
 }
 
 static void sven_close_log() {
     if (LIKELY(sven_close_log!=NULL)) {
         int res = fclose(sven_log_out);
-//        if (__builtin_expect(res==))
+        if (UNLIKELY(res!=0))
+            SVEN_WARN_ERRNO("fclose: %s", opt.sven_log_path);
     }
 }
 

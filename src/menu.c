@@ -2,6 +2,7 @@
 
 Copyright (C) 1999-2003 Tom Gilbert.
 Copyright (C) 2010-2020 Birte Kristina Friesel.
+Copyright (C) 2024 Steven Marion. (I think?)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -30,6 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "winwidget.h"
 #include "filelist.h"
 #include "options.h"
+#include "sven_stuff.h"
 
 Window menu_cover = 0;
 feh_menu *menu_root = NULL;
@@ -897,6 +899,8 @@ void feh_menu_init_main(void)
 	menu_main = feh_menu_new();
 	menu_main->name = estrdup("MAIN");
 
+	sven_add_to_main_menu(menu_main);
+
 	feh_menu_add_entry(menu_main, "File", "FILE", 0, 0, NULL);
 	if (opt.slideshow || opt.multiwindow) {
 		feh_menu_add_entry(menu_main, "Sort List", "SORT", 0, 0, NULL);
@@ -1377,6 +1381,9 @@ void feh_menu_cb(feh_menu * m, feh_menu_item * i, int action, unsigned short dat
 			else
 				opt.keep_zoom_vp = 0;
 			break;
+		default:
+			// assume it's one of the sven ones
+			sven_handle_main_menu_action(m, i, action, data);
 	}
 	return;
 }

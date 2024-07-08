@@ -23,4 +23,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
+#include "menu.h"
+
 void init_sven_stuff();
+
+void sven_add_to_main_menu(feh_menu *m);
+void sven_handle_main_menu_action(feh_menu *m, feh_menu_item *i, int action, unsigned short data);
