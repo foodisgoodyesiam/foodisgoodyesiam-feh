@@ -31,6 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdbool.h>
 #include <malloc.h>
 #include <string.h>
+#include <fcntl.h>
 #include "feh.h"
 #include "options.h"
 #include "filelist.h"
@@ -61,7 +62,12 @@ static void sven_close_log();
 
 void init_sven_stuff() {
     if (opt.sven_log_path != NULL) {
-        sven_log_out = fopen(opt.sven_log_path, "wat");
+        int fd_temp = open(opt.sven_log_path, O_WRONLY | O_CREAT | O_EXCL, 0777);
+        // doing it this way so it'll fail if the file already exists. There's other ways this could be done, but I like this one
+        if (UNLIKELY(fd_temp == -1)) {
+            SVEN_FATAL_ERRNO("open: %s", opt.sven_log_path);
+        }
+        sven_log_out = fdopen(fd_temp, "at");
         if (UNLIKELY(sven_log_out==NULL)) {
             SVEN_FATAL_ERRNO("Could not open %s", opt.sven_log_path);
         }
